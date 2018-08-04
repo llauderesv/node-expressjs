@@ -25,7 +25,7 @@ function router(nav) {
     (async function query() {
       const { bookId } = req.params;
       const request = new sql.Request(); // Connecting to MSSQL Azure Database
-      // Create a Query
+      // Create a Query with a input parameter
       const { recordset } = await request
         .input('bookId', sql.Int, bookId)
         .query('SELECT * FROM Books WHERE bookId = @bookId');
