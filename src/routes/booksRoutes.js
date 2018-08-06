@@ -21,24 +21,30 @@ function router(nav) {
     })();
   });
 
-  bookRouter.route('/:bookId').get((req, res) => {
-    (async function query() {
-      const { bookId } = req.params;
-      const request = new sql.Request(); // Connecting to MSSQL Azure Database
-      // Create a Query with a input parameter
-      const { recordset } = await request
-        .input('bookId', sql.Int, bookId)
-        .query('SELECT * FROM Books WHERE bookId = @bookId');
+  bookRouter
+    .route('/:bookId')
+    .all((req, res, next) => {
+      (async function query() {
+        const { bookId } = req.params;
+        const request = new sql.Request(); // Connecting to MSSQL Azure Database
+        // Create a Query with a input parameter
+        const { recordset } = await request
+          .input('bookId', sql.Int, bookId)
+          .query('SELECT * FROM Books WHERE bookId = @bookId');
 
-      debug('Successfully fetched Details:', recordset[0]);
+        debug('Successfully fetched Details using Route Middleware:', recordset[0]);
 
+        [req.book] = recordset;
+        next();
+      })();
+    })
+    .get((req, res) => {
       res.render('bookView', {
         title: 'Book Detailed View',
         nav,
-        book: recordset[0],
+        book: req.book,
       });
-    })();
-  });
+    });
   return bookRouter;
 }
 
