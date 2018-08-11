@@ -7,12 +7,12 @@
   <title>Storystrap Template</title>
   <meta name="generator" content="Bootply" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
   <!--[if lt IE 9]>
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-  <link href="/css/styles.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
 </head>
 
 <body>
@@ -96,50 +96,44 @@
 
         <div class="panel">
           <div class="panel-body">
-            <div class="row">
-              <br>
-              <div class="col-md-2 col-sm-3 text-center">
-                <a class="story-title" href="#">
-                  <img alt="" src="<%=book.details.image_url%>" class="img-thumbnail">
-                </a>
-              </div>
-              <div class="col-md-10 col-sm-9">
-                <h3>
-                  <%=book.details.title%>
-                </h3>
-                <div class="row">
-                  <div class="col-xs-9">
-                    <h4>
-                      <span class="label label-default">
-                        <%=book.author%>
-                      </span>
-                    </h4>
-                    <p>
-                      <%-book.details.description%>
-                    </p>
-                    <h4>
-                      <small style="font-family:courier,'new courier';" class="text-muted">2 hours ago •
-                        <a class="text-muted">Read More</a>
-                      </small>
-                    </h4>
-                  </div>
-                  <div class="col-xs-3"></div>
+            <% books.forEach((book) => { %>
+              <div class="row">
+                <br>
+                <div class="col-md-2 col-sm-3 text-center">
+                  <a class="story-title" href="#">
+                    <img alt="" src="<%=book.image_url%>" class="img-thumbnail">
+                  </a>
                 </div>
-                <br>
-                <br>
+                <div class="col-md-10 col-sm-9">
+                  <h3>
+                    <%=book.title%>
+                  </h3>
+                  <div class="row">
+                    <div class="col-xs-9">
+                      <p>
+                        <%-book.description%>
+                      </p>
+                      <h4>
+                        <small style="font-family:courier,'new courier';" class="text-muted">2 hours ago •
+                          <a href="/books/<%=book.id%>" class="text-muted">Read More</a>
+                        </small>
+                      </h4>
+                    </div>
+                    <div class="col-xs-3"></div>
+                  </div>
+                  <br>
+                  <br>
+                </div>
               </div>
-            </div>
-            <hr>
+              <hr>
+              <% }); %>
 
-            <!--/stories-->
-            <a href="/" class="btn btn-primary pull-right btnNext">More
-              <i class="glyphicon glyphicon-chevron-right"></i>
-            </a>
+                <a href="/" class="btn btn-primary pull-right btnNext">More
+                  <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
 
           </div>
         </div>
-
-
 
       </div>
       <!--/col-12-->
@@ -202,7 +196,7 @@
   </footer>
   <!-- script references -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-  <script src="/js/bootstrap.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
 </body>
 
 </html>

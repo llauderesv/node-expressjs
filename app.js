@@ -4,6 +4,9 @@ const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require('path');
 const sql = require('mssql');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,6 +28,14 @@ const config = {
 sql.connect(config).catch(error => debug(error));
 app.use(morgan('tiny'));
 
+// User Body Parser for submitting form...
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(cookieParser());
+app.use(session({ secret: 'my-library' }));
+
+require('./src/config/passport.js')(app);
 // Applying Custom Middleware
 // Middleware is function that comes in...
 // app.use((req, res, next) => {
@@ -50,18 +61,35 @@ app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
 // Use this nav to make use from the whole routes...
-const nav = [
-  { link: '/books', title: 'books' },
-  { link: '/authors', title: 'authors' },
-];
 
+const getCurrentNavigation = user => {
+  const nav = [
+    { link: '/books', title: 'books' },
+    { link: '/authors', title: 'authors' },
+  ];
+
+  if (user) {
+    nav.push({ link: '/auth/logout', title: 'Log out' });
+  }
+  return nav;
+};
+
+app.use((req, res, next) => {
+  res.nav = getCurrentNavigation(req.user);
+  next();
+});
 // const bookRouter = require('./src/routes/booksRoutes')(nav)
 // Load the Book Route Separate file...
-const bookRouter = require('./src/routes/booksRoutesMongo')(nav); // Load the Book Route Separate file...
-const adminRouter = require('./src/routes/adminRoutes')(nav); // Load the Book Route Separate file...
+const bookRouter = require('./src/routes/booksRoutesMongo'); // Load the Book Route Separate file...
+const adminRouter = require('./src/routes/adminRoutes'); // Load the Book Route Separate file...
+const authRouter = require('./src/routes/authRoutes'); // Load the Auth Router Separate file...
+const authorRouter = require('./src/routes/authorRoutes'); // Load the Auth Router Separate file...
 
-app.use('/books', bookRouter);
-app.use('/admin', adminRouter);
+app.use('/books', bookRouter());
+app.use('/admin', adminRouter());
+app.use('/auth', authRouter());
+app.use('/authors', authorRouter());
+
 app.get('/', (req, res) => {
   // res.send("Hello from my Library app"); // Display text in the browser...
   // Using Path join you can work with path carefully...
@@ -70,7 +98,7 @@ app.get('/', (req, res) => {
   // We are now using PUG/JADE to our templating engines
   res.render('index', {
     title: 'Library',
-    nav,
+    nav: res.nav,
   });
 });
 

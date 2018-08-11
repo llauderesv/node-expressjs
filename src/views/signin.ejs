@@ -96,42 +96,30 @@
 
         <div class="panel">
           <div class="panel-body">
+
+
             <div class="row">
               <br>
-              <div class="col-md-2 col-sm-3 text-center">
-                <a class="story-title" href="#">
-                  <img alt="" src="<%=book.details.image_url%>" class="img-thumbnail">
-                </a>
-              </div>
-              <div class="col-md-10 col-sm-9">
-                <h3>
-                  <%=book.details.title%>
-                </h3>
-                <div class="row">
-                  <div class="col-xs-9">
-                    <h4>
-                      <span class="label label-default">
-                        <%=book.author%>
-                      </span>
-                    </h4>
-                    <p>
-                      <%-book.details.description%>
-                    </p>
-                    <h4>
-                      <small style="font-family:courier,'new courier';" class="text-muted">2 hours ago •
-                        <a class="text-muted">Read More</a>
-                      </small>
-                    </h4>
+              <div class="col-md-7">
+                <h1 class="text-center">Sign In</h1>
+                <form action="/auth/signin" method="post">
+                  <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input class="form-control" type="text" name="username" value="username">
                   </div>
-                  <div class="col-xs-3"></div>
-                </div>
-                <br>
-                <br>
+
+                  <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input class="form-control" type="password" name="password" value="password">
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-block btn-primary btn-lg">Sign In</button>
+                  </div>
+                </form>
               </div>
             </div>
             <hr>
 
-            <!--/stories-->
             <a href="/" class="btn btn-primary pull-right btnNext">More
               <i class="glyphicon glyphicon-chevron-right"></i>
             </a>
